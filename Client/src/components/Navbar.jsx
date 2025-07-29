@@ -2,10 +2,30 @@ import React from "react";
 import { GraduationCap } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setUser } from "@/redux/authSlice";
+import { toast } from "sonner";
 
 const Navbar = () => {
-  const user = false;
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { user } = useSelector(store => store.auth)
+  
+  const logoutHandler = async ()=> {
+    try {
+      const res= await axios.get('http://localhost:8000/api/v1/user/logout',{withCredentials:true});
+      if(res.data.success){
+        navigate('/')
+        dispatch(setUser(null))
+        toast.success(res.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message)
+    }
+  }
   return (
     <div className="bg-gray-900 z-50 w-full py-3 fixed top-0">
       <div className="max-w-7xl mx-auto flex justify-between">
@@ -13,7 +33,7 @@ const Navbar = () => {
         <Link to='/'>
           <div className="flex gap-1">
             <GraduationCap className="text-gray-300 w-10 h-10" />
-            <h1 className="text-gray-300 text-3xl font-bold">Logo</h1>
+            <h1 className="text-gray-300 text-3xl font-bold">DeepLearn</h1>
           </div>
         </Link>
 
@@ -29,14 +49,20 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center gap-7">
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <Button className="bg-blue-500 hover:bg-blue-600">
+                {
+                  user.role === "instructor" && <Link to="/admin/dashboard"><li className="cursor-pointer">Admin</li></Link>
+                }
+                <Link to="/profile">
+                  <Avatar>
+                    <AvatarImage
+                      src={user.photoUrl}
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </Link>
+
+                <Button onClick={logoutHandler} className="bg-blue-500 hover:bg-blue-600">
                   Logout
                 </Button>
               </div>

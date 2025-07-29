@@ -1,9 +1,10 @@
 import Hero from '@/components/Hero'
 import React from 'react'
-import { coursesJson } from './Courses'
 import CourseCard from '@/components/CourseCard'
+import { useSelector } from 'react-redux'
 
 const Home = () => {
+  const {course} = useSelector(store => store.course)
   return (
     <div>
       <Hero />
@@ -17,8 +18,8 @@ const Home = () => {
         </p>
         <div className='max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
         {
-          coursesJson.slice(0, 6).map((course) => {
-            return <CourseCard course={course} />
+          course.slice(0, 6).map((course, index) => {
+            return <CourseCard key={index} course={course} />
           })
         }
       </div>
