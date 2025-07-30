@@ -9,7 +9,7 @@ import Signup from './Pages/auth/Signup'
 import Home from './Pages/Home'
 import Footer from './components/Footer'
 import Profile from './Pages/Profile'
-import Admin from './Pages/admin/admin'
+import Admin from './Pages/admin/Admin'
 import Dashboard from './Pages/admin/DashBoard'
 import Course from './Pages/admin/Course'
 import CreateCourse from './Pages/admin/CreateCourse'
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
         element:<CreateLecture/>
       },
       {
-        path: "course/:courseId/lecture/:lectureId/edit",
+        path: "course/:courseId/lecture/:lectureId",
         element:<EditLecture/>
       },
     ]
